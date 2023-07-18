@@ -1,7 +1,9 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
+#include <pybind11/eigen.h>
 
+#include <aliceVision/geometry/Pose3.hpp>
 #include <aliceVision/sfmData/SfMData.hpp>
 #include <aliceVision/sfmDataIO/sfmDataIO.hpp>
 
@@ -14,6 +16,7 @@ using namespace aliceVision;
 
 
 PYBIND11_MAKE_OPAQUE(sfmData::Views)
+PYBIND11_MAKE_OPAQUE(sfmData::Poses)
 
 
 PYBIND11_MODULE(pyalicevision, m) {
@@ -28,9 +31,31 @@ PYBIND11_MODULE(pyalicevision, m) {
         .def_property("intrinsicId", &sfmData::View::getIntrinsicId, &sfmData::View::setIntrinsicId)
         .def_property("poseId", &sfmData::View::getPoseId, &sfmData::View::setPoseId)
         .def_property("frameId", &sfmData::View::getFrameId, &sfmData::View::setFrameId)
-        .def_property_readonly("metadata", [](std::shared_ptr<sfmData::View> self) { return self->getMetadata(); });
+        .def("metadata",
+            static_cast<const std::map<std::string, std::string> & (sfmData::View::*)() const>
+                (&sfmData::View::getMetadata));
+    
+    py::class_<geometry::Pose3>(m, "Pose3")
+        .def(py::init<>())
+        .def("rotation",
+            static_cast<const Mat3 & (geometry::Pose3::*)() const>
+                (&geometry::Pose3::rotation))
+        .def("center",
+            static_cast<const Vec3 & (geometry::Pose3::*)() const>
+                (&geometry::Pose3::center));
+    
+    py::class_<sfmData::CameraPose>(m, "CameraPose")
+        .def(py::init<>())
+        .def_property("transform", &sfmData::CameraPose::getTransform, &sfmData::CameraPose::setTransform)
+        .def_property("locked",
+            &sfmData::CameraPose::isLocked,
+            [](sfmData::CameraPose & self, bool lock) {
+                if (self.isLocked() && !lock) self.unlock();
+                else if (!self.isLocked() && lock) self.lock();
+            });
     
     py::bind_map<sfmData::Views>(m, "Views");
+    py::bind_map<sfmData::Poses>(m, "Poses");
     
     py::class_<sfmData::SfMData>(m, "SfMData")
         .def(py::init<>())
@@ -46,5 +71,8 @@ PYBIND11_MODULE(pyalicevision, m) {
                 throw std::runtime_error("Failed to load SfMData file.");
             }
         })
-        .def_readwrite("views", &sfmData::SfMData::views);
+        .def_readwrite("views", &sfmData::SfMData::views)
+        .def("poses",
+            static_cast<const sfmData::Poses & (sfmData::SfMData::*)() const>
+                (&sfmData::SfMData::getPoses));
 }

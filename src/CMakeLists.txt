@@ -12,6 +12,7 @@ endif()
 
 target_link_libraries(pyalicevision
 PUBLIC
+    aliceVision_geometry
     aliceVision_sfmData
     aliceVision_sfmDataIO 
 )
