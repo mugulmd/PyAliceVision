@@ -1,23 +1,32 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
 
 #include <aliceVision/sfmData/SfMData.hpp>
 #include <aliceVision/sfmDataIO/sfmDataIO.hpp>
 
 #include <stdexcept>
 #include <string>
+#include <memory>
 
 namespace py = pybind11;
 using namespace aliceVision;
 
 
+PYBIND11_MAKE_OPAQUE(sfmData::Views)
+
+
 PYBIND11_MODULE(pyalicevision, m) {
     m.doc() = "Python binding for AliceVision";
 
-    py::class_<sfmData::View>(m, "View")
-        .def(py::init<const std::string &>())
-        .def("getImagePath", &sfmData::View::getImagePath);
+    py::class_<sfmData::View, std::shared_ptr<sfmData::View>>(m, "View")
+        .def(py::init<>())
+        .def_property("path", &sfmData::View::getImagePath, &sfmData::View::setImagePath);
+    
+    py::bind_map<sfmData::Views>(m, "Views");
     
     py::class_<sfmData::SfMData>(m, "SfMData")
+        .def(py::init<>())
         .def(py::init([](const std::string & filename) {
             sfmData::SfMData self;
             if (!sfmDataIO::Load(self, filename, sfmDataIO::ESfMData::ALL)) {
@@ -29,5 +38,6 @@ PYBIND11_MODULE(pyalicevision, m) {
             if (!sfmDataIO::Save(self, filename, sfmDataIO::ESfMData::ALL)) {
                 throw std::runtime_error("Failed to load SfMData file.");
             }
-        });
+        })
+        .def_readwrite("views", &sfmData::SfMData::views);
 }
