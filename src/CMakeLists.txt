@@ -1,5 +1,7 @@
 set(pyalicevision_sources
     pyalicevision.cpp
+    camera.cpp
+    geometry.cpp
     sfmdata.cpp
 )
 

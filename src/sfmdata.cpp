@@ -1,7 +1,5 @@
 #include "pyalicevision.hpp"
 
-#include <aliceVision/camera/camera.hpp>
-#include <aliceVision/geometry/Pose3.hpp>
 #include <aliceVision/sfmData/SfMData.hpp>
 #include <aliceVision/sfmDataIO/sfmDataIO.hpp>
 
@@ -32,15 +30,6 @@ void bind_sfmdata(py::module & m) {
             static_cast<const std::map<std::string, std::string> & (sfmData::View::*)() const>
                 (&sfmData::View::getMetadata));
     
-    py::class_<geometry::Pose3>(m, "Pose3")
-        .def(py::init<>())
-        .def("rotation",
-            static_cast<const Mat3 & (geometry::Pose3::*)() const>
-                (&geometry::Pose3::rotation))
-        .def("center",
-            static_cast<const Vec3 & (geometry::Pose3::*)() const>
-                (&geometry::Pose3::center));
-    
     py::class_<sfmData::CameraPose>(m, "CameraPose")
         .def(py::init<>())
         .def_property("transform", &sfmData::CameraPose::getTransform, &sfmData::CameraPose::setTransform)
@@ -50,10 +39,6 @@ void bind_sfmdata(py::module & m) {
                 if (self.isLocked() && !lock) self.unlock();
                 else if (!self.isLocked() && lock) self.lock();
             });
-    
-    py::class_<camera::IntrinsicBase, std::shared_ptr<camera::IntrinsicBase>>(m, "IntrinsicBase")
-        .def_property("width", &camera::IntrinsicBase::w, &camera::IntrinsicBase::setWidth)
-        .def_property("height", &camera::IntrinsicBase::h, &camera::IntrinsicBase::setHeight);
     
     py::class_<sfmData::Landmark>(m, "Landmark")
         .def(py::init<>())
