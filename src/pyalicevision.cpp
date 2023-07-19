@@ -78,6 +78,8 @@ PYBIND11_MODULE(pyalicevision, m) {
                 throw std::runtime_error("Failed to load SfMData file.");
             }
         })
+        .def_property("featuresFolders", &sfmData::SfMData::getFeaturesFolders, &sfmData::SfMData::setFeaturesFolders)
+        .def_property("matchesFolders", &sfmData::SfMData::getMatchesFolders, &sfmData::SfMData::setMatchesFolders)
         .def_readwrite("views", &sfmData::SfMData::views)
         .def("poses",
             static_cast<const sfmData::Poses & (sfmData::SfMData::*)() const>
