@@ -1,5 +1,9 @@
 #include "pyalicevision.hpp"
 
+#include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
+#include <pybind11/eigen.h>
+
 #include <aliceVision/sfmData/SfMData.hpp>
 #include <aliceVision/sfmDataIO/sfmDataIO.hpp>
 

@@ -7,4 +7,5 @@ PYBIND11_MODULE(pyalicevision, m) {
     bind_geometry(m);
     bind_camera(m);
     bind_sfmdata(m);
+    bind_image(m);
 }

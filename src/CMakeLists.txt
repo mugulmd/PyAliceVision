@@ -2,6 +2,7 @@ set(pyalicevision_sources
     pyalicevision.cpp
     camera.cpp
     geometry.cpp
+    image.cpp
     sfmdata.cpp
 )
 
@@ -27,6 +28,7 @@ target_link_libraries(pyalicevision
 PUBLIC
     aliceVision_camera
     aliceVision_geometry
+    aliceVision_image
     aliceVision_sfmData
     aliceVision_sfmDataIO 
 )

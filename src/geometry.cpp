@@ -1,5 +1,7 @@
 #include "pyalicevision.hpp"
 
+#include <pybind11/eigen.h>
+
 #include <aliceVision/geometry/Pose3.hpp>
 
 using namespace aliceVision;
