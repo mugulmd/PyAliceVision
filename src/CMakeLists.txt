@@ -1,5 +1,16 @@
-pybind11_add_module(pyalicevision
+set(pyalicevision_sources
     pyalicevision.cpp
+    sfmdata.cpp
+)
+
+set(pyalicevision_headers
+    pyalicevision.hpp
+)
+
+
+pybind11_add_module(pyalicevision
+    ${pyalicevision_sources}
+    ${pyalicevision_headers}
 )
 
 
