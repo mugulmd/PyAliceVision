@@ -5,6 +5,8 @@
 namespace py = pybind11;
 
 
+// Binding routines
+// Used for splitting binding code over multiple files
 void bind_camera(py::module & m);
 void bind_geometry(py::module & m);
 void bind_image(py::module & m);

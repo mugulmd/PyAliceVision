@@ -8,6 +8,7 @@ using namespace aliceVision;
 
 
 void bind_camera(py::module & m) {
+    // Intrinsic types
     py::enum_<camera::EINTRINSIC>(m, "IntrinsicType")
         .value("PINHOLE_CAMERA", camera::PINHOLE_CAMERA)
         .value("PINHOLE_CAMERA_RADIAL1", camera::PINHOLE_CAMERA_RADIAL1)
@@ -22,10 +23,13 @@ void bind_camera(py::module & m) {
         .value("EQUIDISTANT_CAMERA_RADIAL3", camera::EQUIDISTANT_CAMERA_RADIAL3)
         .export_values();
 
+    // IntrinsicBase
+    // Top-level of the intrinsic class hierarchy
     py::class_<camera::IntrinsicBase, std::shared_ptr<camera::IntrinsicBase>>(m, "IntrinsicBase")
         .def_property("width", &camera::IntrinsicBase::w, &camera::IntrinsicBase::setWidth)
         .def_property("height", &camera::IntrinsicBase::h, &camera::IntrinsicBase::setHeight)
         .def("intrinsicType", &camera::IntrinsicBase::getType);
     
+    // Intrinsic factory
     m.def("createIntrinsic", &camera::createIntrinsic);
 }

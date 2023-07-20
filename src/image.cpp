@@ -7,8 +7,11 @@
 using namespace aliceVision;
 
 
+// Template to generate binding code for each image class
 template<typename T>
 void declare_image_class(py::module & m, const std::string & name) {
+    // Image<PixelType>
+    // Also takes care of Image IO
     py::class_<image::Image<T>>(m, name.c_str())
         .def(py::init<>())
         .def(py::init<int, int, bool, T>())
@@ -32,6 +35,7 @@ void declare_image_class(py::module & m, const std::string & name) {
 
 
 void bind_image(py::module & m) {
+    // Template instantiation for each image class
     declare_image_class<unsigned char>(m, "ImageUChar");
     declare_image_class<float>(m, "ImageFloat");
 }

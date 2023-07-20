@@ -14,6 +14,8 @@
 using namespace aliceVision;
 
 
+// Turn containers into opaque objects to allow passing by reference
+// This will avoid copies made during internal conversions
 PYBIND11_MAKE_OPAQUE(sfmData::Views)
 PYBIND11_MAKE_OPAQUE(sfmData::Poses)
 PYBIND11_MAKE_OPAQUE(sfmData::Intrinsics)
@@ -21,6 +23,7 @@ PYBIND11_MAKE_OPAQUE(sfmData::Landmarks)
 
 
 void bind_sfmdata(py::module & m) {
+    // View
     py::class_<sfmData::View, std::shared_ptr<sfmData::View>>(m, "View")
         .def(py::init<>())
         .def_property("path", &sfmData::View::getImagePath, &sfmData::View::setImagePath)
@@ -34,6 +37,7 @@ void bind_sfmdata(py::module & m) {
             static_cast<const std::map<std::string, std::string> & (sfmData::View::*)() const>
                 (&sfmData::View::getMetadata));
     
+    // CameraPose
     py::class_<sfmData::CameraPose>(m, "CameraPose")
         .def(py::init<>())
         .def_property("transform", &sfmData::CameraPose::getTransform, &sfmData::CameraPose::setTransform)
@@ -44,15 +48,19 @@ void bind_sfmdata(py::module & m) {
                 else if (!self.isLocked() && lock) self.lock();
             });
     
+    // Landmark
     py::class_<sfmData::Landmark>(m, "Landmark")
         .def(py::init<>())
         .def_readwrite("X", &sfmData::Landmark::X);
     
+    // Expose containers as Python objects
     py::bind_map<sfmData::Views>(m, "Views");
     py::bind_map<sfmData::Poses>(m, "Poses");
     py::bind_map<sfmData::Intrinsics>(m, "Intrinsics");
     py::bind_map<sfmData::Landmarks>(m, "Landmarks");
     
+    // SfMData
+    // Also takes care of SfMData IO
     py::class_<sfmData::SfMData>(m, "SfMData")
         .def(py::init<>())
         .def(py::init([](const std::string & filename) {

@@ -1,3 +1,4 @@
+# Sources
 set(pyalicevision_sources
     pyalicevision.cpp
     camera.cpp
@@ -6,17 +7,21 @@ set(pyalicevision_sources
     sfmdata.cpp
 )
 
+
+# Headers
 set(pyalicevision_headers
     pyalicevision.hpp
 )
 
 
+# PyAliceVision module
 pybind11_add_module(pyalicevision
     ${pyalicevision_sources}
     ${pyalicevision_headers}
 )
 
 
+# Compile options
 if(MSVC)
     target_compile_options(pyalicevision PUBLIC /W4)
 else()
@@ -24,6 +29,7 @@ else()
 endif()
 
 
+# Libraries
 target_link_libraries(pyalicevision
 PUBLIC
     aliceVision_camera
@@ -34,6 +40,7 @@ PUBLIC
 )
 
 
+# Install
 install(
 TARGETS
     pyalicevision
