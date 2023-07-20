@@ -1,7 +1,11 @@
+import os
+import numpy as np
+
 import pyalicevision as AV
 
 
 def test_view():
+    """Test creating a view."""
     view = AV.View()
     view.path = "/path/to/a/view"
     assert isinstance(view.path, str)
@@ -20,3 +24,39 @@ def test_view():
     assert view.frameId == 465
     assert isinstance(view.metadata(), dict)
     assert len(view.metadata().keys()) == 0
+
+def test_camera_pose():
+    """Test creating a camera pose."""
+    pose = AV.CameraPose()
+    pose.locked = False
+    assert not pose.locked
+    pose.locked = True
+    assert pose.locked
+
+def test_landmark():
+    """Test creating a landmark."""
+    landmark = AV.Landmark()
+    pos = landmark.X
+    assert isinstance(pos, np.ndarray)
+    assert pos.shape == (3,)
+
+def test_load():
+    """Test loading a SfMData from disk."""
+    path = os.path.abspath(os.path.dirname(__file__))+'/data/small.sfm'
+    data = AV.SfMData(path)
+    assert len(data.views.keys()) == 30
+    assert len(data.intrinsics.keys()) == 1
+    assert len(data.structure.keys()) == 0
+
+def test_save():
+    """Test saving a SfMData to disk."""
+    data = AV.SfMData()
+    for i in range(10):
+        view = AV.View()
+        view.path = f'/path/to/img{i}.jpg'
+        view.viewId = i
+        data.views[i] = view
+    assert len(data.views.keys()) == 10
+    path = os.path.abspath(os.path.dirname(__file__))+'/out/dump.sfm'
+    data.save(path)
+    assert os.path.exists(path)
