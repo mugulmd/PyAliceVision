@@ -19,14 +19,16 @@ void declare_image_class(py::module & m, const std::string & name) {
             "Create an image with given dimensions and optionally fill it with a given value.",
             py::arg("w"), py::arg("h"),
             py::arg("fill") = false, py::arg("val") = T{})
-        .def(py::init([](const std::string & filename) {
+        .def(py::init(
+            [](const std::string & filename) {
                 image::Image<T> self;
                 image::readImage(filename, self, image::EImageColorSpace::SRGB);
                 return self;
             }),
             "Load an image from disk.",
             py::arg("filename"))
-        .def("save", [](const image::Image<T> & self, const std::string & filename) {
+        .def("save",
+            [](const image::Image<T> & self, const std::string & filename) {
                 image::writeImage(filename, self, image::ImageWriteOptions());
             },
             "Save the image to disk.",
@@ -35,10 +37,16 @@ void declare_image_class(py::module & m, const std::string & name) {
         .def("height", &image::Image<T>::Height)
         .def("depth", &image::Image<T>::Depth)
         .def("channels", &image::Image<T>::Channels)
-        .def("at",
+        .def("get",
             static_cast<const T & (image::Image<T>::*)(int, int) const>(&image::Image<T>::operator()),
             "Get pixel value at position (row, col).",
-            py::arg("row"), py::arg("col"));
+            py::arg("row"), py::arg("col"))
+        .def("set",
+            [](image::Image<T> & self, int row, int col, T value) {
+                self(row, col) = value;
+            },
+            "Set pixel value at position (row, col).",
+            py::arg("row"), py::arg("col"), py::arg("val"));
 }
 
 
