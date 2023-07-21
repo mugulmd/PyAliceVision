@@ -10,7 +10,6 @@ Currently it mainly focuses on SfMData and image manipulation.
 
 ## Usage
 
-
 Code sample for SfMData manipulation:
 ```python
 import pyalicevision as AV
@@ -44,3 +43,10 @@ sphinx-build -b html docs/source/ docs/build/html/
 ```
 
 After running this command, the documentation pages can be found at `docs/build/html/index.html`.
+
+## Testing
+
+To run all unit tests, use the following command:
+```
+pytest tests/
+```
