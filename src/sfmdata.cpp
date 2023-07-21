@@ -6,6 +6,7 @@
 
 #include <aliceVision/sfmData/SfMData.hpp>
 #include <aliceVision/sfmDataIO/sfmDataIO.hpp>
+#include <aliceVision/sfmDataIO/viewIO.hpp>
 
 #include <stdexcept>
 #include <string>
@@ -35,7 +36,15 @@ void bind_sfmdata(py::module & m) {
         .def_property("frameId", &sfmData::View::getFrameId, &sfmData::View::setFrameId)
         .def("metadata",
             static_cast<const std::map<std::string, std::string> & (sfmData::View::*)() const>
-                (&sfmData::View::getMetadata));
+                (&sfmData::View::getMetadata))
+        .def("complete", [](std::shared_ptr<sfmData::View> self) {
+                sfmDataIO::updateIncompleteView(*self);
+            },
+            "Update incomplete information on this view.")
+        .def("buildIntrinsic", [](std::shared_ptr<sfmData::View> self) {
+                return sfmDataIO::getViewIntrinsic(*self);
+            },
+            "Generate a camera model corresponding to this view.");
     
     // CameraPose
     py::class_<sfmData::CameraPose>(m, "CameraPose")

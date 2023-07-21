@@ -40,7 +40,7 @@ def test_landmark():
     assert isinstance(pos, np.ndarray)
     assert pos.shape == (3,)
 
-def test_load():
+def test_sfmdata_load():
     """Test loading a SfMData from disk."""
     path = os.path.abspath(os.path.dirname(__file__))+'/data/small.sfm'
     data = AV.SfMData(path)
@@ -48,7 +48,7 @@ def test_load():
     assert len(data.intrinsics.keys()) == 1
     assert len(data.structure.keys()) == 0
 
-def test_save():
+def test_sfmdata_save():
     """Test saving a SfMData to disk."""
     data = AV.SfMData()
     for i in range(10):
@@ -60,3 +60,14 @@ def test_save():
     path = os.path.abspath(os.path.dirname(__file__))+'/out/dump.sfm'
     data.save(path)
     assert os.path.exists(path)
+
+def test_camera_init():
+    "Test completing a view and building the corresponding intrinsic."
+    view = AV.View()
+    view.path = os.path.abspath(os.path.dirname(__file__))+'/data/pie.jpg'
+    view.complete()
+    assert view.width == 1008 and view.height == 756
+    assert len(view.metadata()) > 0
+    cam = view.buildIntrinsic()
+    assert cam.width == 1008 and cam.height == 756
+    assert cam.intrinsicType() == AV.PINHOLE_CAMERA_RADIAL3

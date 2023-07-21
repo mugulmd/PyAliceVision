@@ -18,13 +18,19 @@ import pyalicevision as AV
 # Load SfMData
 data = AV.SfMData('/path/to/input/sfmdata.sfm')
 
-# Create new view
+# Create new view and complete its information
 view = AV.View()
-view.viewId = 1287057
 view.path = '/some/path/to/an/image.jpg'
+view.complete()
 
 # Add view to SfMData
 data.views[view.viewId] = view
+
+# Build corresponding intrinsic
+cam = view.buildIntrinsic()
+
+# Add intrinsic to SfMData
+data.intrinsics[view.intrinsicId] = cam
 
 # Save modified SfMData
 data.save('/path/to/output/sfmdata.abc')
