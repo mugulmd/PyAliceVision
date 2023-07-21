@@ -37,11 +37,13 @@ void bind_sfmdata(py::module & m) {
         .def("metadata",
             static_cast<const std::map<std::string, std::string> & (sfmData::View::*)() const>
                 (&sfmData::View::getMetadata))
-        .def("complete", [](std::shared_ptr<sfmData::View> self) {
+        .def("complete",
+            [](std::shared_ptr<sfmData::View> self) {
                 sfmDataIO::updateIncompleteView(*self);
             },
             "Update incomplete information on this view.")
-        .def("buildIntrinsic", [](std::shared_ptr<sfmData::View> self) {
+        .def("buildIntrinsic",
+            [](std::shared_ptr<sfmData::View> self) {
                 return sfmDataIO::getViewIntrinsic(*self);
             },
             "Generate a camera model corresponding to this view.");
@@ -72,7 +74,8 @@ void bind_sfmdata(py::module & m) {
     // Also takes care of SfMData IO
     py::class_<sfmData::SfMData>(m, "SfMData")
         .def(py::init<>())
-        .def(py::init([](const std::string & filename) {
+        .def(py::init(
+            [](const std::string & filename) {
                 sfmData::SfMData self;
                 if (!sfmDataIO::Load(self, filename, sfmDataIO::ESfMData(sfmDataIO::ALL))) {
                     throw std::runtime_error("Failed to load SfMData file.");
@@ -81,7 +84,8 @@ void bind_sfmdata(py::module & m) {
             }),
             "Load a SfMData from disk.",
             py::arg("filename"))
-        .def("save", [](const sfmData::SfMData & self, const std::string & filename) {
+        .def("save",
+            [](const sfmData::SfMData & self, const std::string & filename) {
                 if (!sfmDataIO::Save(self, filename, sfmDataIO::ESfMData(sfmDataIO::ALL))) {
                     throw std::runtime_error("Failed to load SfMData file.");
                 }
