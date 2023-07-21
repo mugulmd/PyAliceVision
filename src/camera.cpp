@@ -31,5 +31,11 @@ void bind_camera(py::module & m) {
         .def("intrinsicType", &camera::IntrinsicBase::getType);
     
     // Intrinsic factory
-    m.def("createIntrinsic", &camera::createIntrinsic);
+    m.def("createIntrinsic",
+        &camera::createIntrinsic,
+        "Factory method to create camera models.",
+        py::arg("intrinsicType"),
+        py::arg("w") = 0, py::arg("h") = 0,
+        py::arg("focalX") = 0, py::arg("focalY") = 0,
+        py::arg("offsetX") = 0, py::arg("offsetY") = 0);
 }

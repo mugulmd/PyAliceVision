@@ -64,23 +64,26 @@ void bind_sfmdata(py::module & m) {
     py::class_<sfmData::SfMData>(m, "SfMData")
         .def(py::init<>())
         .def(py::init([](const std::string & filename) {
-            sfmData::SfMData self;
-            if (!sfmDataIO::Load(self, filename, sfmDataIO::ESfMData(sfmDataIO::ALL))) {
-                throw std::runtime_error("Failed to load SfMData file.");
-            }
-            return self;
-        }))
+                sfmData::SfMData self;
+                if (!sfmDataIO::Load(self, filename, sfmDataIO::ESfMData(sfmDataIO::ALL))) {
+                    throw std::runtime_error("Failed to load SfMData file.");
+                }
+                return self;
+            }),
+            "Load a SfMData from disk.",
+            py::arg("filename"))
         .def("save", [](const sfmData::SfMData & self, const std::string & filename) {
-            if (!sfmDataIO::Save(self, filename, sfmDataIO::ESfMData(sfmDataIO::ALL))) {
-                throw std::runtime_error("Failed to load SfMData file.");
-            }
-        })
+                if (!sfmDataIO::Save(self, filename, sfmDataIO::ESfMData(sfmDataIO::ALL))) {
+                    throw std::runtime_error("Failed to load SfMData file.");
+                }
+            },
+            "Save the SfMData to disk.",
+            py::arg("filename"))
         .def_property("featuresFolders", &sfmData::SfMData::getFeaturesFolders, &sfmData::SfMData::setFeaturesFolders)
         .def_property("matchesFolders", &sfmData::SfMData::getMatchesFolders, &sfmData::SfMData::setMatchesFolders)
         .def_readwrite("views", &sfmData::SfMData::views)
         .def("poses",
-            static_cast<const sfmData::Poses & (sfmData::SfMData::*)() const>
-                (&sfmData::SfMData::getPoses))
+            static_cast<const sfmData::Poses & (sfmData::SfMData::*)() const>(&sfmData::SfMData::getPoses))
         .def_readwrite("intrinsics", &sfmData::SfMData::intrinsics)
         .def_readwrite("structure", &sfmData::SfMData::structure);
 }
