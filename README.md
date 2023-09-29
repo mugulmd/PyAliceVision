@@ -18,8 +18,7 @@ import pyalicevision as AV
 data = AV.SfMData('/path/to/input/sfmdata.sfm')
 
 # Create new view and complete its information
-view = AV.View()
-view.path = '/some/path/to/an/image.jpg'
+view = AV.View('/some/path/to/an/image.jpg')
 view.complete()
 
 # Add view to SfMData

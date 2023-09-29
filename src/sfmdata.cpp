@@ -24,19 +24,25 @@ PYBIND11_MAKE_OPAQUE(sfmData::Landmarks)
 
 
 void bind_sfmdata(py::module & m) {
+    // ImageInfo
+    py::class_<sfmData::ImageInfo>(m, "ImageInfo")
+        .def_property("path", &sfmData::ImageInfo::getImagePath, &sfmData::ImageInfo::setImagePath)
+        .def_property("width", &sfmData::ImageInfo::getWidth, &sfmData::ImageInfo::setWidth)
+        .def_property("height", &sfmData::ImageInfo::getHeight, &sfmData::ImageInfo::setHeight)
+        .def("metadata",
+            static_cast<const std::map<std::string, std::string> & (sfmData::ImageInfo::*)() const>
+                (&sfmData::ImageInfo::getMetadata));
+
     // View
     py::class_<sfmData::View, std::shared_ptr<sfmData::View>>(m, "View")
-        .def(py::init<>())
-        .def_property("path", &sfmData::View::getImagePath, &sfmData::View::setImagePath)
-        .def_property("width", &sfmData::View::getWidth, &sfmData::View::setWidth)
-        .def_property("height", &sfmData::View::getHeight, &sfmData::View::setHeight)
+        .def(py::init<const std::string &>())
         .def_property("viewId", &sfmData::View::getViewId, &sfmData::View::setViewId)
         .def_property("intrinsicId", &sfmData::View::getIntrinsicId, &sfmData::View::setIntrinsicId)
         .def_property("poseId", &sfmData::View::getPoseId, &sfmData::View::setPoseId)
         .def_property("frameId", &sfmData::View::getFrameId, &sfmData::View::setFrameId)
-        .def("metadata",
-            static_cast<const std::map<std::string, std::string> & (sfmData::View::*)() const>
-                (&sfmData::View::getMetadata))
+        .def("imageInfo",
+            static_cast<const sfmData::ImageInfo & (sfmData::View::*)() const>
+                (&sfmData::View::getImage))
         .def("complete",
             [](std::shared_ptr<sfmData::View> self) {
                 sfmDataIO::updateIncompleteView(*self);
