@@ -100,9 +100,16 @@ void bind_sfmdata(py::module & m) {
             py::arg("filename"))
         .def_property("featuresFolders", &sfmData::SfMData::getFeaturesFolders, &sfmData::SfMData::setFeaturesFolders)
         .def_property("matchesFolders", &sfmData::SfMData::getMatchesFolders, &sfmData::SfMData::setMatchesFolders)
-        .def_readwrite("views", &sfmData::SfMData::views)
+        .def("views",
+            static_cast<sfmData::Views & (sfmData::SfMData::*)()>(&sfmData::SfMData::getViews),
+            py::return_value_policy::reference_internal)
         .def("poses",
-            static_cast<const sfmData::Poses & (sfmData::SfMData::*)() const>(&sfmData::SfMData::getPoses))
-        .def_readwrite("intrinsics", &sfmData::SfMData::intrinsics)
-        .def_readwrite("structure", &sfmData::SfMData::structure);
+            static_cast<sfmData::Poses & (sfmData::SfMData::*)()>(&sfmData::SfMData::getPoses),
+            py::return_value_policy::reference_internal)
+        .def("intrinsics",
+            static_cast<sfmData::Intrinsics & (sfmData::SfMData::*)()>(&sfmData::SfMData::getIntrinsics),
+            py::return_value_policy::reference_internal)
+        .def("landmarks",
+            static_cast<sfmData::Landmarks & (sfmData::SfMData::*)()>(&sfmData::SfMData::getLandmarks),
+            py::return_value_policy::reference_internal);
 }

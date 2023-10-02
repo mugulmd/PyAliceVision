@@ -22,13 +22,13 @@ view = AV.View('/some/path/to/an/image.jpg')
 view.complete()
 
 # Add view to SfMData
-data.views[view.viewId] = view
+data.views()[view.viewId] = view
 
 # Build corresponding intrinsic
 cam = view.buildIntrinsic()
 
 # Add intrinsic to SfMData
-data.intrinsics[view.intrinsicId] = cam
+data.intrinsics()[view.intrinsicId] = cam
 
 # Save modified SfMData
 data.save('/path/to/output/sfmdata.abc')

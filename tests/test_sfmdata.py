@@ -44,9 +44,9 @@ def test_sfmdata_load():
     """Test loading a SfMData from disk."""
     path = os.path.abspath(os.path.dirname(__file__))+'/data/small.sfm'
     data = AV.SfMData(path)
-    assert len(data.views.keys()) == 30
-    assert len(data.intrinsics.keys()) == 1
-    assert len(data.structure.keys()) == 0
+    assert len(data.views().keys()) == 30
+    assert len(data.intrinsics().keys()) == 1
+    assert len(data.landmarks().keys()) == 0
 
 def test_sfmdata_save():
     """Test saving a SfMData to disk."""
@@ -54,8 +54,8 @@ def test_sfmdata_save():
     for i in range(10):
         view = AV.View(f'/path/to/img{i}.jpg')
         view.viewId = i
-        data.views[i] = view
-    assert len(data.views.keys()) == 10
+        data.views()[i] = view
+    assert len(data.views().keys()) == 10
     path = os.path.abspath(os.path.dirname(__file__))+'/out/dump.sfm'
     data.save(path)
     assert os.path.exists(path)
