@@ -17,6 +17,7 @@ find_package(pybind11 REQUIRED)
 
 
 # AliceVision dependency
+add_definitions(-DBOOST_USE_WINAPI_VERSION=BOOST_WINAPI_VERSION_WIN7)
 find_package(AliceVision REQUIRED)
 
 

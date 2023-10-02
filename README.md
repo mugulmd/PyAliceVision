@@ -8,6 +8,10 @@ Python binding for AliceVision.
 
 Currently it mainly focuses on SfMData and image manipulation.
 
+## Setup
+
+See [the installation steps](INSTALL.md) to build the project.
+
 ## Usage
 
 Code sample for SfMData manipulation:
