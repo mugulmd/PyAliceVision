@@ -2,9 +2,11 @@
 set(pyalicevision_sources
     pyalicevision.cpp
     camera.cpp
+    feature_engine.cpp
     geometry.cpp
     image.cpp
     sfmdata.cpp
+    system.cpp
 )
 
 
@@ -33,10 +35,13 @@ endif()
 target_link_libraries(pyalicevision
 PUBLIC
     aliceVision_camera
+    aliceVision_feature
+    aliceVision_featureEngine
     aliceVision_geometry
     aliceVision_image
     aliceVision_sfmData
-    aliceVision_sfmDataIO 
+    aliceVision_sfmDataIO
+    aliceVision_system
 )
 
 
