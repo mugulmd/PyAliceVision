@@ -4,10 +4,10 @@ import pyalicevision as AV
 
 
 @pytest.mark.parametrize("intrinsicType", [
-    AV.PINHOLE_CAMERA,
-    AV.PINHOLE_CAMERA_RADIAL3,
-    AV.PINHOLE_CAMERA_3DEANAMORPHIC4,
-    AV.EQUIDISTANT_CAMERA
+    "pinhole",
+    "radial3",
+    "3deanamorphic4",
+    "equidistant"
 ])
 def test_create_intrinsic(intrinsicType):
     """Test creating intrinsics with different intrinsic types."""
