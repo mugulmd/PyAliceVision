@@ -2,9 +2,11 @@
 set(pyalicevision_sources
     pyalicevision.cpp
     camera.cpp
+    feature.cpp
     feature_engine.cpp
     geometry.cpp
     image.cpp
+    matching.cpp
     sfmdata.cpp
     system.cpp
 )
@@ -39,6 +41,8 @@ PUBLIC
     aliceVision_featureEngine
     aliceVision_geometry
     aliceVision_image
+    aliceVision_matching
+    aliceVision_matchingImageCollection
     aliceVision_sfmData
     aliceVision_sfmDataIO
     aliceVision_system
